@@ -15,6 +15,61 @@ export const fetchTables = async () => {
   return data.map(table => table.table_name)
 }
 
+export const createTables = async () => {
+  const { error: eventsError } = await supabase.query(`
+    CREATE TABLE IF NOT EXISTS events (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      title VARCHAR(255) NOT NULL,
+      description TEXT,
+      date TIMESTAMP WITH TIME ZONE NOT NULL,
+      location VARCHAR(255) NOT NULL,
+      ticket_price DECIMAL(10, 2) NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  const { error: usersError } = await supabase.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      email VARCHAR(255) UNIQUE NOT NULL,
+      password_hash VARCHAR(255) NOT NULL,
+      name VARCHAR(255),
+      role VARCHAR(50),
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  const { error: ticketsError } = await supabase.query(`
+    CREATE TABLE IF NOT EXISTS tickets (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      event_id UUID REFERENCES events(id),
+      user_id UUID REFERENCES users(id),
+      status VARCHAR(50) NOT NULL,
+      purchase_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  const { error: feedbackError } = await supabase.query(`
+    CREATE TABLE IF NOT EXISTS feedback (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      user_id UUID REFERENCES users(id),
+      feedback_type VARCHAR(50) NOT NULL,
+      message TEXT NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  if (eventsError || usersError || ticketsError || feedbackError) {
+    throw new Error('Error creating tables');
+  }
+
+  console.log('Tables created successfully');
+}
+
 export const fetchTableData = async (tableName) => {
   const { data, error } = await supabase
     .from(tableName)
