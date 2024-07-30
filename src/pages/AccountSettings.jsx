@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,21 +10,37 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 const AccountSettings = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('john.doe@example.com');
-  const [phone, setPhone] = useState('(123) 456-7890');
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [roles, setRoles] = useState({
-    eventAttendee: true,
-    barCustomer: true,
+    eventAttendee: false,
+    barCustomer: false,
     eventOrganizer: false,
     administrator: false,
   });
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+      setEmail(user.email || '');
+      setPhone(user.phone || '');
+      setRoles(user.roles || {});
+    }
+  }, [user]);
 
   const handleUpdateInfo = (e) => {
     e.preventDefault();
     // Here you would typically send the updated info to a backend
     console.log({ name, email, phone, roles });
     toast.success("Account information updated successfully!");
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   const mockOrders = [
@@ -35,6 +53,10 @@ const AccountSettings = () => {
     { id: 1, event: 'Tech Conference 2024', date: '2024-06-15', status: 'Confirmed' },
     { id: 2, event: 'Music Festival', date: '2024-07-20', status: 'Pending' },
   ];
+
+  if (!user) {
+    return <div>Please log in to view your account settings.</div>;
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -85,6 +107,9 @@ const AccountSettings = () => {
                 <Button type="submit">Update Information</Button>
               </form>
             </CardContent>
+            <CardFooter>
+              <Button variant="outline" onClick={handleLogout}>Logout</Button>
+            </CardFooter>
           </Card>
         </TabsContent>
 
