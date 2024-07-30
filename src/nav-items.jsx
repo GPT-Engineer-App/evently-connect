@@ -7,7 +7,7 @@ import AccountSettings from "./pages/AccountSettings.jsx";
 import EventManagement from "./pages/EventManagement.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
-import MyTickets from "./pages/MyTickets.jsx";
+import MyTickets from "./pages/MyTickets";
 
 /**
  * Central place for defining the navigation items. Used for navigation components and routing.
