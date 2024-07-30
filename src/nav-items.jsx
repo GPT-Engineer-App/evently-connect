@@ -1,8 +1,9 @@
-import { Home, Beer, Map, MessageSquare } from "lucide-react";
+import { Home, Beer, Map, MessageSquare, User } from "lucide-react";
 import Index from "./pages/Index.jsx";
 import BarMenu from "./pages/BarMenu.jsx";
 import VenueNavigation from "./pages/VenueNavigation.jsx";
 import Feedback from "./pages/Feedback.jsx";
+import AccountSettings from "./pages/AccountSettings.jsx";
 
 /**
  * Central place for defining the navigation items. Used for navigation components and routing.
@@ -31,5 +32,11 @@ export const navItems = [
     to: "/feedback",
     icon: <MessageSquare className="h-4 w-4" />,
     page: <Feedback />,
+  },
+  {
+    title: "Account",
+    to: "/account",
+    icon: <User className="h-4 w-4" />,
+    page: <AccountSettings />,
   },
 ];
