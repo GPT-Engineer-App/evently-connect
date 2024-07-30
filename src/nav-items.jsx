@@ -1,7 +1,8 @@
-import { Home, Beer, Map } from "lucide-react";
+import { Home, Beer, Map, MessageSquare } from "lucide-react";
 import Index from "./pages/Index.jsx";
 import BarMenu from "./pages/BarMenu.jsx";
 import VenueNavigation from "./pages/VenueNavigation.jsx";
+import Feedback from "./pages/Feedback.jsx";
 
 /**
  * Central place for defining the navigation items. Used for navigation components and routing.
@@ -24,5 +25,11 @@ export const navItems = [
     to: "/venue-navigation",
     icon: <Map className="h-4 w-4" />,
     page: <VenueNavigation />,
+  },
+  {
+    title: "Feedback",
+    to: "/feedback",
+    icon: <MessageSquare className="h-4 w-4" />,
+    page: <Feedback />,
   },
 ];
