@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Calendar as CalendarIcon } from "lucide-react";
+import { Search, Calendar as CalendarIcon, Plus } from "lucide-react";
 import EventDetails from '@/components/EventDetails';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [date, setDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [userRoles, setUserRoles] = useState(['eventAttendee', 'barCustomer']); // This should be fetched from a user context or API
 
   const events = [
     { id: 1, title: "Tech Conference 2024", date: "2024-06-15", location: "San Francisco, CA" },
@@ -42,6 +43,11 @@ const Index = () => {
         <Button variant="outline" className="w-10 h-10 p-0">
           <CalendarIcon className="h-4 w-4" />
         </Button>
+        {userRoles.includes('eventOrganizer') && (
+          <Button variant="outline" className="w-10 h-10 p-0">
+            <Plus className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       {selectedEvent ? (

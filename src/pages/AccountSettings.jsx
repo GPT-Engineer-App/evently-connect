@@ -4,16 +4,24 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 const AccountSettings = () => {
   const [name, setName] = useState('John Doe');
   const [email, setEmail] = useState('john.doe@example.com');
   const [phone, setPhone] = useState('(123) 456-7890');
+  const [roles, setRoles] = useState({
+    eventAttendee: true,
+    barCustomer: true,
+    eventOrganizer: false,
+    administrator: false,
+  });
 
   const handleUpdateInfo = (e) => {
     e.preventDefault();
     // Here you would typically send the updated info to a backend
+    console.log({ name, email, phone, roles });
     toast.success("Account information updated successfully!");
   };
 
@@ -58,6 +66,21 @@ const AccountSettings = () => {
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone</Label>
                   <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Roles</Label>
+                  <div className="space-y-2">
+                    {Object.entries(roles).map(([role, checked]) => (
+                      <div key={role} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={role}
+                          checked={checked}
+                          onCheckedChange={(checked) => setRoles(prev => ({ ...prev, [role]: checked }))}
+                        />
+                        <Label htmlFor={role}>{role.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</Label>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <Button type="submit">Update Information</Button>
               </form>
