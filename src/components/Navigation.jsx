@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from "@/components/ui/button";
 import { navItems } from '../nav-items';
+import { toast } from "sonner";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -16,6 +18,16 @@ const Navigation = () => {
     if (item.role && (!user || user.role !== item.role)) return false;
     return true;
   });
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success('Logged out successfully');
+      navigate('/login');
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <nav className={`bg-gray-800 text-white w-64 min-h-screen ${isOpen ? 'block' : 'hidden'} md:block`}>
@@ -37,7 +49,7 @@ const Navigation = () => {
           ))}
         </ul>
         {user ? (
-          <Button onClick={logout} className="mt-4 w-full">Logout</Button>
+          <Button onClick={handleLogout} className="mt-4 w-full">Logout</Button>
         ) : (
           <Link to="/login">
             <Button className="mt-4 w-full">Login</Button>

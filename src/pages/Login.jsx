@@ -12,13 +12,15 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically validate the user credentials with your backend
-    // For this example, we'll just simulate a successful login
-    login({ email });
-    toast.success('Logged in successfully');
-    navigate('/');
+    try {
+      await login(email, password);
+      toast.success('Logged in successfully');
+      navigate('/');
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (

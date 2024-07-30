@@ -11,19 +11,21 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
-    // Here you would typically send the registration data to your backend
-    // For this example, we'll just simulate a successful registration
-    login({ email });
-    toast.success('Registered successfully');
-    navigate('/');
+    try {
+      await register(email, password);
+      toast.success('Registered successfully');
+      navigate('/');
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
