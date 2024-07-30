@@ -21,7 +21,11 @@ const Cart = ({ items, onClose, onRemove, onPlaceOrder }) => {
           <ScrollArea className="h-[300px]">
             {items.map((item, index) => (
               <div key={index} className="flex justify-between items-center mb-2">
-                <span>{item.name} - ${item.price}</span>
+                <div>
+                  <span>{item.name} - ${item.price}</span>
+                  <br />
+                  <small className="text-muted-foreground">{item.customization}</small>
+                </div>
                 <Button variant="destructive" size="sm" onClick={() => onRemove(index)}>Remove</Button>
               </div>
             ))}
