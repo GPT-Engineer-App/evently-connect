@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Calendar as CalendarIcon, Plus } from "lucide-react";
+import { Search, Calendar as CalendarIcon, Plus, Database } from "lucide-react";
 import EventDetails from '@/components/EventDetails';
+import TableDisplay from '@/components/TableDisplay';
 import { format } from "date-fns";
 import { Link } from 'react-router-dom';
 
@@ -76,6 +77,11 @@ const Index = () => {
           ))}
         </div>
       )}
+
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Database Tables</h2>
+        <TableDisplay />
+      </div>
     </div>
   );
 };
