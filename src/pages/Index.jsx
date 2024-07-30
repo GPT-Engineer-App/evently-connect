@@ -1,22 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, Calendar as CalendarIcon, Plus } from "lucide-react";
 import EventDetails from '@/components/EventDetails';
+import { format } from "date-fns";
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [date, setDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [userRoles, setUserRoles] = useState(['eventAttendee', 'barCustomer']); // This should be fetched from a user context or API
+  const [userRoles, setUserRoles] = useState(['eventAttendee', 'barCustomer', 'eventOrganizer']); // This should be fetched from a user context or API
+  const [events, setEvents] = useState([]);
 
-  const events = [
-    { id: 1, title: "Tech Conference 2024", date: "2024-06-15", location: "San Francisco, CA" },
-    { id: 2, title: "Music Festival", date: "2024-07-20", location: "Austin, TX" },
-    { id: 3, title: "Food & Wine Expo", date: "2024-08-10", location: "New York, NY" },
-  ];
+  useEffect(() => {
+    // In a real application, this would be an API call
+    const storedEvents = JSON.parse(localStorage.getItem('events') || '[]');
+    setEvents(storedEvents);
+  }, []);
 
   const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -44,9 +47,11 @@ const Index = () => {
           <CalendarIcon className="h-4 w-4" />
         </Button>
         {userRoles.includes('eventOrganizer') && (
-          <Button variant="outline" className="w-10 h-10 p-0">
-            <Plus className="h-4 w-4" />
-          </Button>
+          <Link to="/event-management">
+            <Button variant="outline" className="w-10 h-10 p-0">
+              <Plus className="h-4 w-4" />
+            </Button>
+          </Link>
         )}
       </div>
 
@@ -61,7 +66,8 @@ const Index = () => {
                 <CardDescription>{event.location}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p>Date: {event.date}</p>
+                <p>Date: {format(new Date(event.date), "PPP")}</p>
+                <p>Ticket Price: ${event.ticketPrice}</p>
               </CardContent>
               <CardFooter>
                 <Button onClick={() => setSelectedEvent(event)}>View Details</Button>
