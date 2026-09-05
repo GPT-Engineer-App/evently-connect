@@ -1,0 +1,12 @@
+version: 1
+repository: davlindh/evently-connect
+purpose: Event connectivity and participant interaction experiment.
+status: vertical-experiment
+canonical_parent: null
+capabilities: [events, connectivity, participants]
+vertical: events-culture
+omniframez_role: vertical-experiment
+evidence: {confidence: inferred, sources: [repository-name]}
+harvest_action: inspect-and-harvest-unique-capabilities
+relations:
+  - contributes_to: event collaboration and connectivity
